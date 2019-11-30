@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'scala'
+}
+
+group 'ink.plz'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly "org.scala-lang:scala-library:$scalaVersion"
+    compileOnly "org.scala-lang:scala-reflect:$scalaVersion"
+    compileOnly "org.scala-lang:scala-compiler:$scalaVersion"
+
+    compileOnly "org.apache.spark:spark-core_2.11:$sparkVersion"
+    compileOnly "org.apache.spark:spark-sql_2.11:$sparkVersion"
+//    compileOnly "org.apache.spark:spark-mllib_2.11:$sparkVersion"
+//    compileOnly "org.apache.spark:spark-streaming-flume-assembly_2.11:$sparkVersion"
+//    compileOnly "org.apache.spark:spark-graphx_2.11:$sparkVersion"
+//    compileOnly "org.apache.spark:spark-launcher_2.11:$sparkVersion"
+//    compileOnly "org.apache.spark:spark-catalyst_2.11:$sparkVersion"
+//    compileOnly "org.apache.spark:spark-streaming_2.11:$sparkVersion"
+}
+
+jar {
+    zip64 true
+
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'SimpleApp'
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+}
